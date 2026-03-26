@@ -10,7 +10,6 @@ Welcome to the PawPal+ starter app.
 
 This file is intentionally thin. It gives you a working Streamlit app so you can start quickly,
 but **it does not implement the project logic**. Your job is to design the system and build it.
-
 Use this app as your interactive demo once your backend classes/functions exist.
 """
 )
@@ -44,7 +43,9 @@ pet_name = st.text_input("Pet name", value="Mochi")
 species = st.selectbox("Species", ["dog", "cat", "other"])
 
 st.markdown("### Tasks")
-st.caption("Add a few tasks. In your final version, these should feed into your scheduler.")
+st.caption(
+    "Add a few tasks. In your final version, these should feed into your scheduler."
+)
 
 if "tasks" not in st.session_state:
     st.session_state.tasks = []
@@ -53,7 +54,9 @@ col1, col2, col3 = st.columns(3)
 with col1:
     task_title = st.text_input("Task title", value="Morning walk")
 with col2:
-    duration = st.number_input("Duration (minutes)", min_value=1, max_value=240, value=20)
+    duration = st.number_input(
+        "Duration (minutes)", min_value=1, max_value=240, value=20
+    )
 with col3:
     priority = st.selectbox("Priority", ["low", "medium", "high"], index=2)
 
