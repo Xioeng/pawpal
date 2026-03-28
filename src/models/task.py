@@ -38,4 +38,4 @@ class Task:
 
     def get_task_info(self) -> str:
         """Get task details as a string."""
-        return f"{self.task_type} for {self.pet.name}: {self.frequency}x/day, {self.duration} mins"
+        return f"{self.task_type} for {self.pet.name}: {self.frequency}x/day, {self.duration * self.frequency} mins"

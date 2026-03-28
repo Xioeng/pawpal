@@ -3,7 +3,6 @@
 from datetime import date
 from typing import List
 
-from .enums import Priority
 from .pet import Pet
 from .schedule import Schedule
 from .task import Task
@@ -24,6 +23,9 @@ class PetCareTracker:
         self.available_time = available_time
         self.pets: List[Pet] = []
         self.tasks: List[Task] = []
+        from ..core import Scheduler
+        # Import here to avoid circular imports
+        self.scheduler: Scheduler = Scheduler()
 
     def add_pet(self, pet: Pet) -> None:
         """Add a pet to the tracker."""
@@ -46,16 +48,20 @@ class PetCareTracker:
         if date_ is None:
             date_ = date.today()
 
-        schedule = Schedule(date_, self.available_time)
+        # Use scheduler to determine which tasks fit
+        scheduled_tasks, total_time_used = self.scheduler.schedule_tasks(
+            self.tasks, self.available_time
+        )
 
-        # Sort tasks by priority (high to low)
-        sorted_tasks = sorted(self.tasks, key=lambda t: t.priority)
-
-        # Try to add each task to schedule
-        for task in sorted_tasks:
-            schedule.add_task_to_schedule(task)
-
+        # Create and return the schedule
+        schedule = Schedule(date_, self.available_time, scheduled_tasks)
         return schedule
+
+    def get_schedule_explanation(self, schedule: Schedule) -> str:
+        """Get explanation for why tasks were scheduled this way."""
+        return self.scheduler.explain_scheduling(
+            schedule.scheduled_tasks, schedule.available_time, schedule.total_time_used
+        )
 
     def get_summary(self) -> str:
         """Get summary of owner and their pets."""
